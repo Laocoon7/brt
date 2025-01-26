@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use bevy::prelude::*;
 
@@ -6,12 +6,8 @@ use crate::{direction::Direction, grid::Grid, grid_shapes::{Circle, Line, Rectan
 #[cfg(feature = "icon")]
 use crate::{resources::WindowIcon, systems::set_window_icon};
 
-#[derive(Default)]
 pub struct BrtPlugin {
-    pub base: PathBuf,
-    pub qualifier: String,
-    pub organization: String,
-    pub application: String,
+    pub folders: Folders,
 
     #[cfg(feature = "icon")]
     pub icon: Option<&'static [u8]>,
@@ -24,11 +20,9 @@ impl BrtPlugin {
         orginization: impl ToString,
         application: impl ToString,
     ) -> Self {
+        let folders = Folders::new(base, qualifier, orginization, application);
         Self {
-            base: base.as_ref().to_path_buf(),
-            qualifier: qualifier.to_string(),
-            organization: orginization.to_string(),
-            application: application.to_string(),
+            folders,
             
             #[cfg(feature = "icon")]
             icon: None,
@@ -39,6 +33,10 @@ impl BrtPlugin {
     pub fn with_icon(mut self, icon: &'static [u8]) -> Self {
         self.icon = Some(icon);
         self
+    }
+
+    pub fn folders(&self) -> &Folders {
+        &self.folders
     }
 }
 
@@ -58,12 +56,7 @@ impl Plugin for BrtPlugin {
         app.register_type::<Rectangle>();
 
         app.register_type::<Folders>();
-        app.insert_resource(Folders::new(
-            &self.base,
-            &self.qualifier,
-            &self.organization,
-            &self.application,
-        ));
+        app.insert_resource(self.folders.clone());
         
         app.register_type::<Dice>();
         app.register_type::<Random>();
