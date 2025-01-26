@@ -18,7 +18,12 @@ impl Folders {
         organization: impl ToString,
         application: impl ToString,
     ) -> Self {
-        let project_dirs = ProjectDirs::from(&qualifier.to_string(), &organization.to_string(), &application.to_string()).expect("Failed to get project directories");
+        let project_dirs = ProjectDirs::from(
+            &qualifier.to_string(),
+            &organization.to_string(),
+            &application.to_string(),
+        )
+        .expect("Failed to get project directories");
         Self {
             base: base.as_ref().to_path_buf(),
             config: project_dirs.config_dir().to_path_buf(),
@@ -98,5 +103,4 @@ impl Folders {
         std::fs::create_dir_all(&dir)?;
         std::fs::write(path, contents)
     }
-        
 }

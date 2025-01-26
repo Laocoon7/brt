@@ -19,7 +19,6 @@ rand_pcg = { version = "0.3", features = ["serde1"] } # Selected PCG random numb
 regex = "1" # An implementation of regular expressions for Rust.
 ron = { version = "0.8", features = ["integer128"] } # Rusty Object Notation
 serde = { version = "1", features = ["derive", "rc", "alloc"] } # A generic serialization/deserialization framework
-toml = "0.8" # A native Rust encoder and decoder of TOML-formatted files and streams
 
 # keep the following in sync with Bevy's dependencies
 winit = { version = "0.30", default-features = false }
